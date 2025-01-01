@@ -101,7 +101,7 @@ $title = 'uploaded files';
                     <tr>
                         <td><?= $i++ ?></td>
 
-                        <td><img width="50px" height="50px" src="<?= $blog->img ?>" alt=""></td>
+                        <td><img width="90px" height="50px" src="<?= $_ENV['SITE_URL'] . $blog->img ?>" alt=""></td>
 
                         <td><?= $blog->title ?></td>
                         <td><?= $blog->slug ?></td>

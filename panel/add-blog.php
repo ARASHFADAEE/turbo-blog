@@ -6,13 +6,20 @@ $auth = new Auth();
 $auth->is_login();
 
 include './config/loader.php';
-var_dump($_POST['submit']);
 // List writers
 $writer_query = "SELECT * FROM users WHERE role = ?";
 $stmt = $conn->prepare($writer_query);
 $stmt->bindValue(1, 'writer', PDO::PARAM_STR);
 $stmt->execute();
 $writers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+// List cat
+$writer_query = "SELECT * FROM categories";
+$stmt = $conn->query($writer_query);
+$stmt->execute();
+$cat_lists = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
     $target_dir = "../uploads/";
@@ -44,17 +51,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
     // Check for upload errors
     if ($uploadOk) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-            $url = $_ENV['SITE_URL'] . str_replace('../', '/', $target_file);
+            $image_s =str_replace('../', '/', $target_file);
             try {
                 if (isset($_POST['writer']) && isset($_POST['title']) && isset($_POST['slug']) && isset($_POST['content'])) {
-                    $query = "INSERT INTO articles (user_id, title, slug, img, content, create_time) VALUES (?, ?, ?, ?, ?, ?)";
+                    $query = "INSERT INTO articles (user_id, category_id, title, slug, img, content, create_time) VALUES (?, ?, ?, ?, ?, ?,?)";
                     $stmt = $conn->prepare($query);
                     $stmt->bindValue(1, $_POST['writer'], PDO::PARAM_INT);
-                    $stmt->bindValue(2, $_POST['title'], PDO::PARAM_STR);
-                    $stmt->bindValue(3, $_POST['slug'], PDO::PARAM_STR);
-                    $stmt->bindValue(4, $url, PDO::PARAM_STR);
-                    $stmt->bindValue(5, $_POST['content'], PDO::PARAM_STR);
-                    $stmt->bindValue(6, time(), PDO::PARAM_INT);
+                    $stmt->bindValue(2, $_POST['category'], PDO::PARAM_INT);
+                    $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
+                    $stmt->bindValue(4, $_POST['slug'], PDO::PARAM_STR);
+                    $stmt->bindValue(5, $image_s, PDO::PARAM_STR);
+                    $stmt->bindValue(6, $_POST['content'], PDO::PARAM_STR);
+                    $stmt->bindValue(7, time(), PDO::PARAM_INT);
 
                     $stmt->execute();
 
@@ -102,6 +110,15 @@ $title = 'Upload File';
     </div>
 
     <div class="flex sm:flex-row flex-col">
+        <label class="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Choose category</label>
+        <select name="category" class="form-select flex-1" required>
+            <?php foreach ($cat_lists as $cat): ?>
+                <option value="<?= $cat['id'] ?>"><?= $cat['name'] ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+
+    <div class="flex sm:flex-row flex-col">
         <label class="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Choose Writer</label>
         <select name="writer" class="form-select flex-1" required>
             <?php foreach ($writers as $writer): ?>
@@ -109,6 +126,7 @@ $title = 'Upload File';
             <?php endforeach; ?>
         </select>
     </div>
+    
 
     <button name="submit" type="submit" class="btn btn-primary !mt-6">Save</button>
 </form>

@@ -76,11 +76,11 @@ $title = 'categories';
                         <td><?= $i++ ?></td>
 
 
-                        <td><?= $cat->title ?></td>
+                        <td><?= $cat->name ?></td>
                         <td><?= $cat->slug ?></td>
 
                         <td>
-                            <a href="lists-blogs.php?delete=<?= $cat->id ?>"
+                            <a href="categories.php?delete=<?= $cat->id ?>"
                                style="background: red; padding: 4px; border-radius: 10px; color: #ffff;margin-right: 5px; ">delete</a>
 
                             <a style="background: blue; padding: 4px; border-radius: 10px; color: #ffff;margin-right: 5px; "
