@@ -94,7 +94,7 @@
                                     <a href="add-blog.php?upload=ok">add article</a>
                                 </li>
                                 <li>
-                                    <a href="apps-invoice-add.html">categoreis</a>
+                                    <a  href="categories.php">categoreis</a>
                                 </li>
                 
                             </ul>
