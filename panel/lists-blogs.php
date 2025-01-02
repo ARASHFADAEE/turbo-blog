@@ -14,6 +14,14 @@ if ($_SESSION['role'] == 'admin') {
     $result->execute();
     $blog_lists = $result->fetchAll(PDO::FETCH_OBJ);
 
+}elseif ($_SESSION['role']=='writer'){
+    $query_all_file = "SELECT * FROM `articles` WHERE user_id=?";
+    $result = $conn->prepare($query_all_file);
+    $result->bindValue(1,$_SESSION['user_id']);
+    $result->execute();
+    $blog_lists = $result->fetchAll(PDO::FETCH_OBJ);
+}else{
+    echo 'error database query';
 }
 $i = 1;
 
@@ -74,7 +82,7 @@ $title = 'uploaded files';
 <div class="panel mt-6">
     <?php if ($_SESSION['role'] == 'admin'): ?>
         <h5 class="text-lg font-semibold dark:text-white-light">all articles in script</h5>
-    <?php elseif ($_SESSION['role'] == 'user'): ?>
+    <?php elseif ($_SESSION['role'] == 'writer'): ?>
         <h5 class="text-lg font-semibold dark:text-white-light">your articles</h5>
 
     <?php endif; ?>

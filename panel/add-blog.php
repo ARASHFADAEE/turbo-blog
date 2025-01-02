@@ -53,20 +53,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileToUpload'])) {
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
             $image_s =str_replace('../', '/', $target_file);
             try {
-                if (isset($_POST['writer']) && isset($_POST['title']) && isset($_POST['slug']) && isset($_POST['content'])) {
-                    $query = "INSERT INTO articles (user_id, category_id, title, slug, img, content, create_time) VALUES (?, ?, ?, ?, ?, ?,?)";
-                    $stmt = $conn->prepare($query);
-                    $stmt->bindValue(1, $_POST['writer'], PDO::PARAM_INT);
-                    $stmt->bindValue(2, $_POST['category'], PDO::PARAM_INT);
-                    $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
-                    $stmt->bindValue(4, $_POST['slug'], PDO::PARAM_STR);
-                    $stmt->bindValue(5, $image_s, PDO::PARAM_STR);
-                    $stmt->bindValue(6, $_POST['content'], PDO::PARAM_STR);
-                    $stmt->bindValue(7, time(), PDO::PARAM_INT);
+                if (isset($_POST['title']) && isset($_POST['slug']) && isset($_POST['content'])) {
+                    if ($_SESSION['role']=='writer') {
+                        $query = "INSERT INTO articles (user_id, category_id, title, slug, img, content, create_time) VALUES (?, ?, ?, ?, ?, ?,?)";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bindValue(1, $_SESSION['user_id'], PDO::PARAM_INT);
+                        $stmt->bindValue(2, $_POST['category'], PDO::PARAM_INT);
+                        $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
+                        $stmt->bindValue(4, $_POST['slug'], PDO::PARAM_STR);
+                        $stmt->bindValue(5, $image_s, PDO::PARAM_STR);
+                        $stmt->bindValue(6, $_POST['content'], PDO::PARAM_STR);
+                        $stmt->bindValue(7, time(), PDO::PARAM_INT);
 
-                    $stmt->execute();
+                        $stmt->execute();
 
-                    header("location: ./add-blog.php?file_upload=ok&url_file=" .$_ENV['site_url'] .$_POST['slug']);
+                        header("location: ./add-blog.php?file_upload=ok&url_file=" . $_ENV['site_url'] . $_POST['slug']);
+                    }elseif ($_SESSION['role']=='admin'){
+                        $query = "INSERT INTO articles (user_id, category_id, title, slug, img, content, create_time) VALUES (?, ?, ?, ?, ?, ?,?)";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bindValue(1, $_POST['writer'], PDO::PARAM_INT);
+                        $stmt->bindValue(2, $_POST['category'], PDO::PARAM_INT);
+                        $stmt->bindValue(3, $_POST['title'], PDO::PARAM_STR);
+                        $stmt->bindValue(4, $_POST['slug'], PDO::PARAM_STR);
+                        $stmt->bindValue(5, $image_s, PDO::PARAM_STR);
+                        $stmt->bindValue(6, $_POST['content'], PDO::PARAM_STR);
+                        $stmt->bindValue(7, time(), PDO::PARAM_INT);
+
+                        $stmt->execute();
+
+                        header("location: ./add-blog.php?file_upload=ok&url_file=" . $_ENV['site_url'] . $_POST['slug']);
+                        
+                    }
                 } else {
                     header("location: ./add-blog.php?error=missing_data&message=Required fields are missing.");
                 }
