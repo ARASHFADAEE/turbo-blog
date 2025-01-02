@@ -117,6 +117,8 @@ $title = 'Upload File';
             <?php endforeach; ?>
         </select>
     </div>
+    
+    <?php if($_SESSION['role']=='admin'):?>
 
     <div class="flex sm:flex-row flex-col">
         <label class="sm:w-1/4 sm:ltr:mr-2 rtl:ml-2">Choose Writer</label>
@@ -127,7 +129,7 @@ $title = 'Upload File';
         </select>
     </div>
     
-
+<?php endif; ?>
     <button name="submit" type="submit" class="btn btn-primary !mt-6">Save</button>
 </form>
 <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js"></script>
