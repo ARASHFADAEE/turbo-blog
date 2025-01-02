@@ -122,7 +122,7 @@ $title = 'uploaded files';
                                style="background: red; padding: 4px; border-radius: 10px; color: #ffff;margin-right: 5px; ">delete</a>
 
                             <a style="background: blue; padding: 4px; border-radius: 10px; color: #ffff;margin-right: 5px; "
-                               href="#">edit</a>
+                               href="<?= $_ENV['SITE_URL']?>/panel/edit-blog.php?id=<?= $blog->id?>">edit</a>
                         </td>
                     </tr>
                 <?php } ?>
