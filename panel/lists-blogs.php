@@ -3,9 +3,12 @@ session_start();
 
 require_once('./class/auth.php');
 
-$auth = new Auth();
 
+$auth = new Auth();
 $auth->is_login();
+$auth->is_admin();
+
+
 include './config/loader.php';
 
 if ($_SESSION['role'] == 'admin') {

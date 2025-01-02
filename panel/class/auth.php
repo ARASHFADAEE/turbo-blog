@@ -73,6 +73,16 @@ class Auth
         }
 
     }
+    
+    public function is_admin()
+    {
+        if ($_SESSION['role']=='admin'| $_SESSION['role']=='writer'){
+            return true;
+        }else{
+            header('location: ./index.php');
+        }
+        
+    }
 
     public function logout()
     {

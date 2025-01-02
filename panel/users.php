@@ -6,6 +6,10 @@ require_once('./class/auth.php');
 $auth = new Auth();
 
 $auth->is_login();
+
+if (!$_SESSION['role']=='admin'){
+  header('location: ./index.php');  
+};
 include './config/loader.php';
 //lists users
 if($_SESSION['role']=='admin'){
