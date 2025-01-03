@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_cat'])) {
 
             $stmt->execute();
 
-            header("location: ./add-category.php?success=ok&message=category created succsessfully");
+            header("location: ./categories.php?success=ok&message=category edit succsessfully");
             exit;
         }
     } catch (Exception $e) {
         error_log($e->getMessage());
-        header("location: ./add-category.php?error=db&message=Database error.");
+        header("location: ./categories.php?error=db&message=Database error.");
         exit;
     }
 }

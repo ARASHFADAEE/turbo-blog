@@ -36,7 +36,7 @@ if (isset($_GET['delete'])) {
         $is_admin = $_SESSION['role'] === 'admin';
 
         // بررسی وجود فایل در دیتابیس
-        $query_verify = "SELECT * FROM files WHERE id = ?";
+        $query_verify = "SELECT * FROM 	articles WHERE id = ?";
         $stmt_verify = $conn->prepare($query_verify);
         $stmt_verify->bindValue(1, $id, PDO::PARAM_INT);
         $stmt_verify->execute();
@@ -48,7 +48,7 @@ if (isset($_GET['delete'])) {
 
             // بررسی دسترسی کاربر به فایل
             if ($file_data['user_id'] === $user_id || $is_admin) {
-                $query_delete = "DELETE FROM files WHERE id = ?";
+                $query_delete = "DELETE FROM  articles WHERE id = ?";
                 $stmt_delete = $conn->prepare($query_delete);
                 $stmt_delete->bindValue(1, $id, PDO::PARAM_INT);
                 $stmt_delete->execute();
