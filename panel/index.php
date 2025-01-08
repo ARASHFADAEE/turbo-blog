@@ -21,13 +21,19 @@ include './config/loader.php';
 //$count_users=$result->rowCount();
 //
 //
-////query for show count files in users dashboard
-//$query_count_admin="SELECT * FROM `files` WHERE user_id=?";
-//$result=$conn->prepare($query_count_admin);
-//$result->bindValue(1,$_SESSION['user_id']);
-//$result->execute();
-//$count_files_user=$result->rowCount();
-//
+//query for show count writer in admin dashboard
+$query=" SELECT * FROM users WHERE role='writer'";
+$stmt=$conn->prepare($query);
+$stmt->execute();
+$result_writer_count=$stmt->rowCount();
+
+
+//query for show count users in admin dashboard
+$query_user=" SELECT * FROM users WHERE role='user'";
+$user_stmt=$conn->prepare($query_user);
+$user_stmt->execute();
+$result_user_count=$user_stmt->rowCount();
+
 
 //title page 
 $title='dashboard';
@@ -77,14 +83,14 @@ $title='dashboard';
                         <div>
                             <?php if ($_SESSION['role']=='admin'):?>
                                 <div>blogs in script</div>
-                            <?php elseif ($_SESSION['role']=='user'):?>
+                            <?php elseif ($_SESSION['role']=='writer'):?>
                                 <div>Your content blog</div>
 
                             <?php endif;?>
 
                             <?php if ($_SESSION['role']=='admin'):?>
                                 <div class="text-[#f8538d] text-lg">12</div>
-                            <?php elseif ($_SESSION['role']=='user'):?>
+                            <?php elseif ($_SESSION['role']=='writer'):?>
                                 <div class="text-[#f8538d] text-lg">12</div>
 
                             <?php endif;?>
@@ -95,12 +101,21 @@ $title='dashboard';
 
                     <div>
                         <div>
-                            <div>Registered users</div>
-                            <div class="text-[#f8538d] text-lg">12</div>
+                            <div>Number of writer</div>
+                            <div class="text-[#f8538d] text-lg"><?= $result_writer_count ?></div>
                         </div>
                         <div x-ref="paidVisit" class="overflow-hidden">
                         </div>
                     </div>
+
+                        <div>
+                            <div>
+                                <div>Registered users</div>
+                                <div class="text-[#f8538d] text-lg"><?= $result_user_count?></div>
+                            </div>
+                            <div x-ref="paidVisit" class="overflow-hidden">
+                            </div>
+                        </div>
                     <?php endif;?>
                 </div>
             </div>
