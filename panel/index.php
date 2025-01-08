@@ -34,6 +34,19 @@ $user_stmt=$conn->prepare($query_user);
 $user_stmt->execute();
 $result_user_count=$user_stmt->rowCount();
 
+//query for show count blogs in admin dashboard
+$query_posts=" SELECT * FROM articles";
+$posts_stmt=$conn->query($query_posts);
+$posts_stmt->execute();
+$result_blogs_count=$posts_stmt->rowCount();
+
+//query for show count blogs in writer dashboard
+$query_posts_writer=" SELECT * FROM articles WHERE user_id=?";
+$posts_writer_count=$conn->prepare($query_posts_writer);
+$posts_writer_count->bindValue(1,$_SESSION['user_id']);
+$posts_writer_count->execute();
+$result_writer_posts_count=$posts_writer_count->rowCount();
+
 
 //title page 
 $title='dashboard';
@@ -89,9 +102,9 @@ $title='dashboard';
                             <?php endif;?>
 
                             <?php if ($_SESSION['role']=='admin'):?>
-                                <div class="text-[#f8538d] text-lg">12</div>
+                                <div class="text-[#f8538d] text-lg"><?= $result_blogs_count?></div>
                             <?php elseif ($_SESSION['role']=='writer'):?>
-                                <div class="text-[#f8538d] text-lg">12</div>
+                                <div class="text-[#f8538d] text-lg"><?=$result_writer_posts_count?></div>
 
                             <?php endif;?>
                         </div>
